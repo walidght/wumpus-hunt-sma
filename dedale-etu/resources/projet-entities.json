@@ -1,0 +1,34 @@
+[
+  {
+    "agentType":"agentCollect",
+    "agentName": "Elsa",
+    "communicationRange": 3,
+    "initialLocation": "free",
+    "backPackCapacityGold": 100,
+    "backPackCapacityDiamond":-1,
+    "detectionRadius": 0,
+    "strengthExpertise": 2,
+    "lockPickingExpertise":1
+  },  {
+  "agentType":"agentCollect",
+  "agentName": "Tim",
+  "communicationRange": 3,
+  "initialLocation": "free",
+  "backPackCapacityGold": 100,
+  "backPackCapacityDiamond":-1,
+  "detectionRadius": 0,
+  "strengthExpertise": 2,
+  "lockPickingExpertise":1
+},
+  {
+    "agentType":"wumpus",
+    "agentName": "Golem",
+    "communicationRange": -1,
+    "initialLocation": "free",
+    "backPackCapacityGold": -1,
+    "backPackCapacityDiamond":-1,
+    "detectionRadius": 5,
+    "strengthExpertise": 10,
+    "lockPickingExpertise":-1
+  }
+]
