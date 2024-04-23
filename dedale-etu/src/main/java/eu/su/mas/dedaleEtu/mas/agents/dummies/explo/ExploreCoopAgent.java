@@ -85,8 +85,7 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 		 * 
 		 ************************************************/
 
-		lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames,agents_submaps));
-		lb.add(new ReceiveMessagesBehaviour(this));
+		lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames));
 
 		
 		

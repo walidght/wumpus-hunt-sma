@@ -349,7 +349,8 @@ public class Principal {
 
 		//4) Give the class name of your agent to let the system instantiate it
 		// ag=createNewDedaleAgent(c, agentName,DummyMovingAgent.class.getName(), entityParametersExplo1);
-		ag=createNewDedaleAgent(c, agentName, ExploreCoopAgent.class.getName(), entityParametersExplo1);//ExploreSoloAgent
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo1);//ExploreSoloAgent
 
 		agentList.add(ag);
 

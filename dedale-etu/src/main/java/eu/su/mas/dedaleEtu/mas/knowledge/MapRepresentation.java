@@ -79,7 +79,7 @@ public class MapRepresentation implements Serializable {
 
 	public MapRepresentation(boolean gui) {
 		//System.setProperty("org.graphstream.ui.renderer","org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-		System.setProperty("org.graphstream.ui", "javafx");
+		//System.setProperty("org.graphstream.ui", "javafx");
 		this.g= new SingleGraph("My world vision");
 		this.g.setAttribute("ui.stylesheet",nodeStyle);
 
