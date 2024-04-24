@@ -1,21 +1,21 @@
 package eu.su.mas.dedaleEtu.mas.agents.dummies.explo;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
-import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.platformManagment.*;
 
 import eu.su.mas.dedaleEtu.mas.behaviours.ExploCoopBehaviour;
-import eu.su.mas.dedaleEtu.mas.behaviours.ReceiveMessagesBehaviour;
+import eu.su.mas.dedaleEtu.mas.behaviours.HuntBehaviour;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 
 import jade.core.behaviours.Behaviour;
 
 /**
  * <pre>
- * ExploreCoop agent. 
+ * ExploreCoop agent.
  * Basic example of how to "collaboratively" explore the map
  *  - It explore the map using a DFS algorithm and blindly tries to share the topology with the agents within reach.
  *  - The shortestPath computation is not optimized
@@ -24,12 +24,12 @@ import jade.core.behaviours.Behaviour;
  *  - You should give him the list of agents'name to send its map to in parameter when creating the agent.
  *   Object [] entityParameters={"Name1","Name2};
  *   ag=createNewDedaleAgent(c, agentName, ExploreCoopAgent.class.getName(), entityParameters);
- *  
+ *
  * It stops when all nodes have been visited.
- * 
- * 
+ *
+ *
  *  </pre>
- *  
+ *
  * @author hc
  *
  */
@@ -38,33 +38,32 @@ import jade.core.behaviours.Behaviour;
 public class ExploreCoopAgent extends AbstractDedaleAgent {
 
 	private static final long serialVersionUID = -7969469610241668140L;
-	public MapRepresentation myMap;
+	private MapRepresentation myMap;
 
-	// String: node id
-	// Long: timestamp
-	private ArrayList<Couple<String,Long>> GolemPositionIds = new ArrayList<>();
+	public boolean mapDiscovered = false;
 
-	public ArrayList<MapRepresentation> agents_submaps;
+	public HuntBehaviour myHuntBehaviour;
 
 	public List<String> list_agentNames;
-	
+
 
 	/**
 	 * This method is automatically called when "agent".start() is executed.
-	 * Consider that Agent is launched for the first time. 
-	 * 			1) set the agent attributes 
+	 * Consider that Agent is launched for the first time.
+	 * 			1) set the agent attributes
 	 *	 		2) add the behaviours
-	 *          
+	 *
 	 */
 	protected void setup(){
 
 		super.setup();
-		
+
 		//get the parameters added to the agent at creation (if any)
 		final Object[] args = getArguments();
-		
+
 		list_agentNames=new ArrayList<String>();
-		
+
+
 		if(args.length==0){
 			System.err.println("Error while creating the agent, names of agent to contact expected");
 			System.exit(-1);
@@ -76,37 +75,50 @@ public class ExploreCoopAgent extends AbstractDedaleAgent {
 			}
 		}
 
-
 		List<Behaviour> lb=new ArrayList<Behaviour>();
-		
+
 		/************************************************
-		 * 
+		 *
 		 * ADD the behaviours of the Dummy Moving Agent
-		 * 
+		 *
 		 ************************************************/
 
 		lb.add(new ExploCoopBehaviour(this,this.myMap,list_agentNames));
+		myHuntBehaviour = new HuntBehaviour(this,this.myMap,list_agentNames);
+		lb.add(myHuntBehaviour);
 
-		
-		
+
+
 		/***
 		 * MANDATORY TO ALLOW YOUR AGENT TO BE DEPLOYED CORRECTLY
 		 */
-		
-		
+
+
 		addBehaviour(new startMyBehaviours(this,lb));
 
-
-
-		
 		System.out.println("the  agent "+this.getLocalName()+ " is started");
 
 	}
 
-	public void addNewGolemPosition(Couple<String,Long> positionTimeCouple){
-		GolemPositionIds.add(positionTimeCouple);
+	public boolean getMapDiscovered()
+	{
+		return mapDiscovered;
 	}
-	
-	
-	
+
+	public void setMapDiscovered(boolean mapDiscovered)
+	{
+		this.mapDiscovered = mapDiscovered;
+		this.myHuntBehaviour.setDiscoveredMap(this.myMap);
+	}
+
+	public MapRepresentation getMyMap()
+	{
+		return myMap;
+	}
+
+	public void setMyMap(MapRepresentation myMap)
+	{
+		this.myMap = myMap;
+	}
+
 }

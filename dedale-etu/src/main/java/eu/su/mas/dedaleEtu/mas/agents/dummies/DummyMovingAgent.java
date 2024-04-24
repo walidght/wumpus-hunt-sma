@@ -33,6 +33,11 @@ public class DummyMovingAgent extends AbstractDedaleAgent{
 	 *          
 	 */
 	protected void setup(){
+
+		try {Thread.sleep(50);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		super.setup();
 
 		//get the parameters given into the object[]

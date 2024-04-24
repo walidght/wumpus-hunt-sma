@@ -1,5 +1,6 @@
 package eu.su.mas.dedaleEtu.mas.behaviours;
 
+import java.io.IOException;
 import java.util.*;
 
 import dataStructures.serializableGraph.SerializableSimpleGraph;
@@ -9,10 +10,15 @@ import eu.su.mas.dedale.env.Observation;
 import eu.su.mas.dedale.env.gs.gsLocation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 
+import eu.su.mas.dedale.mas.agent.behaviours.platformManagment.startMyBehaviours;
+import eu.su.mas.dedaleEtu.mas.agents.dummies.explo.ExploreCoopAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import eu.su.mas.dedaleEtu.mas.behaviours.ShareMapBehaviour;
 
+import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -69,6 +75,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 		// if my map is null, create a new empty map
 		if(this.myMap==null) {
 			this.myMap= new MapRepresentation();
+			((ExploreCoopAgent)this.myAgent).setMyMap(this.myMap);
 			this.shareMapBehaviour= new ShareMapBehaviour(this.myAgent,500,myMap,list_agentNames,agents_submaps);
 			this.myAgent.addBehaviour(this.shareMapBehaviour);
 		}
@@ -88,7 +95,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			List<Couple<Location,List<Couple<Observation,Integer>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
 
 			try {
-				this.myAgent.doWait(1000);
+				this.myAgent.doWait(50);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -126,8 +133,22 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 			// if no more open node, exploration finished
 			if (!this.myMap.hasOpenNode()){
+				// before deleting the behaviour close my current position to everyone in range
+				MapRepresentation currentPosSM = new MapRepresentation(false);
+				currentPosSM.addNode(myPosition.getLocationId(), MapAttribute.closed);
+				ACLMessage message = new ACLMessage(CustomPerformatives.SUBMAP);
+				try {
+					message.setContentObject( currentPosSM.getSerializableGraph());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+				for (String agentName : list_agentNames) {
+					message.addReceiver(new AID(agentName,AID.ISLOCALNAME));
+				}
+				myAgent.send(message);
 				finished=true;
 				this.shareMapBehaviour.stop();
+				((ExploreCoopAgent) this.myAgent).setMapDiscovered(true);
 				System.out.println(this.myAgent.getLocalName()+" - Exploration successufully done, behaviour removed.");
 			}else{
 				// selecting next node to visit
@@ -138,7 +159,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 				// in case next node is blocked by another agent, we try to move to a random node until unblocked
 				while(!((AbstractDedaleAgent)this.myAgent).moveTo(new gsLocation(nextNodeId))){
-					this.myAgent.doWait(100);
+					this.myAgent.doWait(10);
 					List<Couple<Location,List<Couple<Observation,Integer>>>> possiblePositions=((AbstractDedaleAgent)this.myAgent).observe();
 					Random rand = new Random();
 					nextNodeId = possiblePositions.get(rand.nextInt(possiblePositions.size())).getLeft().getLocationId();
