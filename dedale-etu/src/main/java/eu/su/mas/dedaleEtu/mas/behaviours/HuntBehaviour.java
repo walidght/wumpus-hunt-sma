@@ -35,18 +35,17 @@ public class HuntBehaviour extends SimpleBehaviour {
     /**
      * Current knowledge of the agent regarding the environment
      */
-    private MapRepresentation discoveredMap;
-    private MapRepresentation patrollingMap = null;
+    private MapRepresentation myMap;
 
     private List<String> list_agentNames;
 
-    private boolean blockByGolem;
+    private boolean blocked = false;
 
     private String targetNode = "";
 
-    private Location golemPos;
+    private Location golemPos = null;
 
-    private int iterations=0;
+    private int iterations = 0;
     private Location suspectedGolemPosition; //this attribute containst the location of the golem when it is detected and sent to other agents
 
     /**
@@ -56,9 +55,7 @@ public class HuntBehaviour extends SimpleBehaviour {
      */
     public HuntBehaviour(final AbstractDedaleAgent myagent, MapRepresentation myMap, List<String> agentNames) {
         super(myagent);
-        this.blockByGolem = false;
-        this.golemPos = null;
-        this.discoveredMap = myMap;
+        this.myMap = myMap;
         this.list_agentNames = agentNames;
     }
 
@@ -68,18 +65,40 @@ public class HuntBehaviour extends SimpleBehaviour {
         Location myPosition = ((AbstractDedaleAgent) this.myAgent).getCurrentPosition();
 
         ACLMessage receivedMessage = this.myAgent.receive();
-        if (receivedMessage != null) {
+        while (receivedMessage != null) {
             if (receivedMessage.getPerformative() == ACLMessage.INFORM) {
+                logMessage("Received a message [INFORM]: "+receivedMessage.getContent());
                 if (golemPos != null && receivedMessage.getContent().equals(golemPos.getLocationId())) {
+                    logMessage("Reseting golem position to null");
                     golemPos = null;
                 }
             }
+            else if (receivedMessage.getPerformative() == ACLMessage.REQUEST) {
+                logMessage("Received a message [REQUEST]: "+receivedMessage.getContent());
+                ACLMessage message = new ACLMessage(CustomPerformatives.SUBMAP);
+                AID senderAID = receivedMessage.getSender();
+                try {
+                    message.setContentObject(this.myMap.getSerializableGraph());
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                message.addReceiver(senderAID);
+                myAgent.send(message);
+            }
+            else  {
+                logMessage("Received a message [UNKNOWN]: "+receivedMessage.getContent());
+            }
+            receivedMessage = this.myAgent.receive();
+
         }
 
         // Start the hunt if the exploration is finished
         if (!((ExploreCoopAgent) this.myAgent).getMapDiscovered()) {
             return;
         }
+
+        logMessage("running action, currently in "+myPosition.getLocationId()+" (iteration="+this.iterations+")");
 
         iterations++;
 
@@ -96,22 +115,25 @@ public class HuntBehaviour extends SimpleBehaviour {
 
         if (possibleGolemPositions.isEmpty()) {
 
-            if(targetNode.isEmpty() || targetNode.equals(myPosition.getLocationId())){
+            if (!blocked) {
+                if (targetNode.isEmpty() || targetNode.equals(myPosition.getLocationId())) {
+                    Random random = new Random();
+                    SerializableSimpleGraph graph = this.myMap.getSerializableGraph();
+                    Object[] nodes = graph.getAllNodes().toArray();
+                    int randomIndex = random.nextInt(nodes.length);
+                    do {
+                        targetNode = ((SerializableNode<String, Object>) nodes[randomIndex]).getNodeId();
+                    } while (targetNode.equals(myPosition.getLocationId()));
+                }
+                nextPos = new gsLocation(this.myMap.getShortestPath(myPosition.getLocationId(), targetNode).get(0));
+
+            } else {
                 Random random = new Random();
-                SerializableSimpleGraph graph = discoveredMap.getSerializableGraph();
-                Object[] nodes = graph.getAllNodes().toArray();
-                int randomIndex = random.nextInt(nodes.length);
-                do {
-                    targetNode = ((SerializableNode<String, Object>)nodes[randomIndex]).getNodeId();
-                }while (targetNode.equals(myPosition.getLocationId()));
+                int randomIndex = random.nextInt(lobs.size());
+                blocked = false;
+                nextPos = lobs.get(randomIndex).getLeft();
             }
 
-
-
-            nextPos = new gsLocation(this.discoveredMap.getShortestPath(myPosition.getLocationId(),targetNode).get(0));
-
-
-            //nextPos = lobs.get(randomIndex).getLeft();
         } else {
             Random random = new Random();
             int randomIndex = random.nextInt(possibleGolemPositions.size());
@@ -125,17 +147,20 @@ public class HuntBehaviour extends SimpleBehaviour {
             try {
                 moved = ((AbstractDedaleAgent) this.myAgent).moveTo(nextPos);
 
-                if (!moved) {
+                if (moved) {
+                    blocked = false;
+                } else {
+                    blocked = true;
                     golemPos = nextPos;
                     ACLMessage message = new ACLMessage(ACLMessage.INFORM);
                     message.setContent(myPosition.getLocationId());
-                    for (String agent_name : ((ExploreCoopAgent) this.myAgent).list_agentNames) {
+                    for (String agent_name : this.list_agentNames) {
                         message.addReceiver(new AID(agent_name, AID.ISLOCALNAME));
                     }
                     myAgent.send(message);
                     logMessage("Blocked by agent/golem!");
-                    logMessage("Currently at iteration: "+iterations);
-
+                    logMessage("Sent my position to near agents (going to random target)");
+                    logMessage("Currently at iteration: " + iterations);
                 }
             } catch (Exception e) {
                 logMessage("Couldnt move to next position");
@@ -146,16 +171,19 @@ public class HuntBehaviour extends SimpleBehaviour {
             try {
                 moved = ((AbstractDedaleAgent) this.myAgent).moveTo(golemPos);
 
-                if (!moved) {
+                if (moved) {
+                    golemPos = null;
+                    blocked = false;
+                } else {
+
                     ACLMessage message = new ACLMessage(ACLMessage.INFORM);
                     message.setContent(myPosition.getLocationId());
-                    for (String agent_name : ((ExploreCoopAgent) this.myAgent).list_agentNames) {
+                    for (String agent_name : this.list_agentNames) {
                         message.addReceiver(new AID(agent_name, AID.ISLOCALNAME));
                     }
                     myAgent.send(message);
-                }
-                else{
-                    golemPos=null;
+                    logMessage("sent my position to near agents (going to golem position:"+golemPos.getLocationId()+" )");
+                    blocked = true;
                 }
 
             } catch (Exception e1) {
@@ -218,8 +246,8 @@ public class HuntBehaviour extends SimpleBehaviour {
         System.out.println(myAgent.getLocalName() + " - " + message);
     }
 
-    public void setDiscoveredMap(MapRepresentation map){
-        this.discoveredMap = map;
+    public void setDiscoveredMap(MapRepresentation map) {
+        this.myMap = map;
     }
 
     @Override

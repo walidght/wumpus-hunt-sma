@@ -95,7 +95,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			List<Couple<Location,List<Couple<Observation,Integer>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
 
 			try {
-				this.myAgent.doWait(50);
+				this.myAgent.doWait(500);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -149,7 +149,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 				finished=true;
 				this.shareMapBehaviour.stop();
 				((ExploreCoopAgent) this.myAgent).setMapDiscovered(true);
-				System.out.println(this.myAgent.getLocalName()+" - Exploration successufully done, behaviour removed.");
+				logMessage("Exploration successufully done, behaviour removed.");
 			}else{
 				// selecting next node to visit
 				// if no directly accessible node, find the closest one
@@ -168,6 +168,11 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 
 		}
 	}
+
+	private void logMessage(String message) {
+		System.out.println(myAgent.getLocalName() + " - " + message);
+	}
+
 
 	@Override
 	public boolean done() {
