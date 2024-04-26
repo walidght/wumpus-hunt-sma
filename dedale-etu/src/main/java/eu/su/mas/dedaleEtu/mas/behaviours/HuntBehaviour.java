@@ -46,6 +46,9 @@ public class HuntBehaviour extends SimpleBehaviour {
     private Location golemPos = null;
 
     private int iterations = 0;
+
+    private MessageTemplate huntTemplate = MessageTemplate.MatchProtocol("HUNT");
+
     private Location suspectedGolemPosition; //this attribute containst the location of the golem when it is detected and sent to other agents
 
     /**
@@ -64,17 +67,28 @@ public class HuntBehaviour extends SimpleBehaviour {
 
         Location myPosition = ((AbstractDedaleAgent) this.myAgent).getCurrentPosition();
 
-        ACLMessage receivedMessage = this.myAgent.receive();
+        ACLMessage receivedMessage = this.myAgent.receive(this.huntTemplate);
         while (receivedMessage != null) {
             if (receivedMessage.getPerformative() == ACLMessage.INFORM) {
-                logMessage("Received a message [INFORM]: "+receivedMessage.getContent());
+                logMessage("Received a message [INFORM]: " + receivedMessage.getContent());
                 if (golemPos != null && receivedMessage.getContent().equals(golemPos.getLocationId())) {
                     logMessage("Reseting golem position to null");
                     golemPos = null;
                 }
             }
-            else if (receivedMessage.getPerformative() == ACLMessage.REQUEST) {
-                logMessage("Received a message [REQUEST]: "+receivedMessage.getContent());
+            receivedMessage = this.myAgent.receive(this.huntTemplate);
+        }
+
+        // Start the hunt if the exploration is finished
+        if (!((ExploreCoopAgent) this.myAgent).getMapDiscovered()) {
+            return;
+        }
+
+        receivedMessage = this.myAgent.receive();
+
+        if (receivedMessage != null) {
+            if (receivedMessage.getPerformative() == ACLMessage.REQUEST) {
+                logMessage("Received a message [REQUEST]: " + receivedMessage.getContent());
                 ACLMessage message = new ACLMessage(CustomPerformatives.SUBMAP);
                 AID senderAID = receivedMessage.getSender();
                 try {
@@ -85,20 +99,12 @@ public class HuntBehaviour extends SimpleBehaviour {
                 }
                 message.addReceiver(senderAID);
                 myAgent.send(message);
+            } else {
+                logMessage("Received a message [UNKNOWN]: " + receivedMessage.getContent());
             }
-            else  {
-                logMessage("Received a message [UNKNOWN]: "+receivedMessage.getContent());
-            }
-            receivedMessage = this.myAgent.receive();
-
         }
 
-        // Start the hunt if the exploration is finished
-        if (!((ExploreCoopAgent) this.myAgent).getMapDiscovered()) {
-            return;
-        }
-
-        logMessage("running action, currently in "+myPosition.getLocationId()+" (iteration="+this.iterations+")");
+        logMessage("running action, currently in " + myPosition.getLocationId() + " (iteration=" + this.iterations + ")");
 
         iterations++;
 
@@ -153,6 +159,7 @@ public class HuntBehaviour extends SimpleBehaviour {
                     blocked = true;
                     golemPos = nextPos;
                     ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+                    message.setProtocol("HUNT");
                     message.setContent(myPosition.getLocationId());
                     for (String agent_name : this.list_agentNames) {
                         message.addReceiver(new AID(agent_name, AID.ISLOCALNAME));
@@ -177,12 +184,13 @@ public class HuntBehaviour extends SimpleBehaviour {
                 } else {
 
                     ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+                    message.setProtocol("HUNT");
                     message.setContent(myPosition.getLocationId());
                     for (String agent_name : this.list_agentNames) {
                         message.addReceiver(new AID(agent_name, AID.ISLOCALNAME));
                     }
                     myAgent.send(message);
-                    logMessage("sent my position to near agents (going to golem position:"+golemPos.getLocationId()+" )");
+                    logMessage("sent my position to near agents (going to golem position:" + golemPos.getLocationId() + " )");
                     blocked = true;
                 }
 

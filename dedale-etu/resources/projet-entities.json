@@ -43,8 +43,19 @@
     "lockPickingExpertise":1
   },
   {
+    "agentType":"agentCollect",
+    "agentName": "Walid",
+    "communicationRange": 3,
+    "initialLocation": "free",
+    "backPackCapacityGold": 100,
+    "backPackCapacityDiamond":-1,
+    "detectionRadius": 0,
+    "strengthExpertise": 2,
+    "lockPickingExpertise":1
+  },
+  {
     "agentType":"wumpus",
-    "agentName": "Golem",
+    "agentName": "Golem1",
     "communicationRange": -1,
     "initialLocation": "free",
     "backPackCapacityGold": -1,
@@ -56,6 +67,39 @@
   {
     "agentType":"wumpus",
     "agentName": "Golem2",
+    "communicationRange": -1,
+    "initialLocation": "free",
+    "backPackCapacityGold": -1,
+    "backPackCapacityDiamond":-1,
+    "detectionRadius": 5,
+    "strengthExpertise": 10,
+    "lockPickingExpertise":-1
+  },
+  {
+    "agentType":"wumpus",
+    "agentName": "Golem3",
+    "communicationRange": -1,
+    "initialLocation": "free",
+    "backPackCapacityGold": -1,
+    "backPackCapacityDiamond":-1,
+    "detectionRadius": 5,
+    "strengthExpertise": 10,
+    "lockPickingExpertise":-1
+  },
+  {
+    "agentType":"wumpus",
+    "agentName": "Golem4",
+    "communicationRange": -1,
+    "initialLocation": "free",
+    "backPackCapacityGold": -1,
+    "backPackCapacityDiamond":-1,
+    "detectionRadius": 5,
+    "strengthExpertise": 10,
+    "lockPickingExpertise":-1
+  },
+  {
+    "agentType":"wumpus",
+    "agentName": "Golem5",
     "communicationRange": -1,
     "initialLocation": "free",
     "backPackCapacityGold": -1,
