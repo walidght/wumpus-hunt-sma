@@ -343,14 +343,6 @@ public class Principal {
 		***/
 		
 		
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!Soutenance Test 1!!!!!!!!!!!!!!!!!!!!!!!!!
-		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
-		Assert.assertNotNull("This container does not exist",c);
-		agentName="CatchMe";
-		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
-		agentList.add(ag);
-		
-		
 //
 //		//1) Get the container where the agent will appear
 //		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
@@ -364,7 +356,8 @@ public class Principal {
 //
 //		//4) Give the class name of your agent to let the system instantiate it
 //		ag=createNewDedaleAgent(c, agentName, DummyWumpusShift.class.getName(), entityParametersg2);
-//		agentList.add(ag);	
+//		agentList.add(ag);
+		
 
 
 /**		// agent 1
@@ -410,11 +403,12 @@ public class Principal {
 		Object [] entityParametersExplo5={"Elsa","Tim","Joe","Onur"};
 		ag=createNewDedaleAgent(c, agentName,
 				ExploreCoopAgent.class.getName(), entityParametersExplo5);
-		agentList.add(ag);*/
+		agentList.add(ag);
 
+		*/
 		
 		//!!!!!!!!!!!!!!!!!!!!!!! Soutenance Test 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		
+		/**
 		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
 		Assert.assertNotNull("This container does not exist",c);
 		agentName="H1";
@@ -438,7 +432,92 @@ public class Principal {
 		ag=createNewDedaleAgent(c, agentName,
 				ExploreCoopAgent.class.getName(), entityParametersExplo3);
 		agentList.add(ag);
-
+		
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="CatchMe";
+		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
+		agentList.add(ag);
+		*/
+		
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Soutenance Test 2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H1";
+		Object [] entityParametersExplo1={"H2", "H3", "H4", "H5", "H6", "H7", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo1);
+		agentList.add(ag);
+		
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H2";
+		Object[] entityParametersExplo2={"H1", "H3", "H4", "H5", "H6", "H7", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo2);
+		agentList.add(ag);
+		
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H3";
+		Object[] entityParametersExplo3={"H1", "H2", "H4", "H5", "H6", "H7", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo3);
+		agentList.add(ag);
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H4";
+		Object[] entityParametersExplo4={"H1", "H2", "H3", "H5", "H6", "H7", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo4);
+		agentList.add(ag);
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H5";
+		Object[] entityParametersExplo5={"H1", "H2", "H3", "H4", "H6", "H7", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo5);
+		agentList.add(ag);
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H6";
+		Object[] entityParametersExplo6={"H1", "H2", "H3", "H4", "H5", "H7", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo6);
+		agentList.add(ag);
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H7";
+		Object[] entityParametersExplo7={"H1", "H2", "H3", "H4", "H5", "H6", "H8"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo7);
+		agentList.add(ag);
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H8";
+		Object[] entityParametersExplo8={"H1", "H2", "H3", "H4", "H5", "H6", "H7"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo8);
+		agentList.add(ag);
+		
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="CatchMe1";
+		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
+		agentList.add(ag);
+		
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="CatchMe2";
+		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
+		agentList.add(ag);
+		
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="CatchMe3";
+		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
+		agentList.add(ag);
+		
 		
 		
 		/***********************************************************************

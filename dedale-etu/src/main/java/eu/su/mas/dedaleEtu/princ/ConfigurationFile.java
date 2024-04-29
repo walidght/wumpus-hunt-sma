@@ -87,12 +87,12 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_TOPOLOGY="resources/topology/map2022-topologyExam-V2b.dgs";
 	//public static String INSTANCE_TOPOLOGY="resources/map2019-topologyExam1";
 	
-	//Soutenance
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!Soutenance!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//map 1
-	public static String INSTANCE_TOPOLOGY="resources/topology/map2024-topologyExam1.dgs";
+	//public static String INSTANCE_TOPOLOGY="resources/topology/map2024-topologyExam1.dgs";
 	
 	//map 2
-	//public static String INSTANCE_TOPOLOGY="resources/topology/map2024-topologyExam2.dgs";
+	public static String INSTANCE_TOPOLOGY="resources/topology/map2024-topologyExam2-s.dgs";
 	
 
 	
@@ -177,10 +177,12 @@ public final class ConfigurationFile {
 	//public static String INSTANCE_CONFIGURATION_ENTITIES=null;
 	
 	
-	//Soutenance
+	//!!!!!!!!!!!!!!!!!!!!!!!!!Soutenance!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//entities map 1
-	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/map2024-1-entities.json";
+	//public static String INSTANCE_CONFIGURATION_ENTITIES="resources/map2024-1-entities.json";
 	
+	//entities map 2
+	public static String INSTANCE_CONFIGURATION_ENTITIES="resources/map2024-2-entities.json";
 
 
 	//public static String INSTANCE_CONFIGURATION_ENTITIES="src/test/java/resources/map2018-agentExplo";
