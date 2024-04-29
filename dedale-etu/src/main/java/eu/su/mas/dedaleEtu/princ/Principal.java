@@ -305,14 +305,14 @@ public class Principal {
 		//				agentList.add(ag);	
 
 		/* Golem 1 */
-		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+/***		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
 		Assert.assertNotNull("This container does not exist",c);
 		agentName="Golem1";
 //		ag=createNewDedaleAgent(c, agentName, DummyWumpusShift2.class.getName(), entityParameters0);
 		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
 		agentList.add(ag);
 
-		/***
+		
 		// Golem 2
 		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
 		Assert.assertNotNull("This container does not exist",c);
@@ -341,6 +341,16 @@ public class Principal {
 		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
 		agentList.add(ag);
 		***/
+		
+		
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!Soutenance Test 1!!!!!!!!!!!!!!!!!!!!!!!!!
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="CatchMe";
+		ag=createNewDedaleAgent(c, agentName, FastDummyWampus.class.getName(), null);
+		agentList.add(ag);
+		
+		
 //
 //		//1) Get the container where the agent will appear
 //		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
@@ -356,7 +366,8 @@ public class Principal {
 //		ag=createNewDedaleAgent(c, agentName, DummyWumpusShift.class.getName(), entityParametersg2);
 //		agentList.add(ag);	
 
-		// agent 1
+
+/**		// agent 1
 		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
 		Assert.assertNotNull("This container does not exist",c);
 		agentName="Elsa";
@@ -364,7 +375,7 @@ public class Principal {
 		ag=createNewDedaleAgent(c, agentName,
 				ExploreCoopAgent.class.getName(), entityParametersExplo1);
 		agentList.add(ag);
-/**
+
 		// agent 2
 		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
 		Assert.assertNotNull("This container does not exist",c);
@@ -401,8 +412,35 @@ public class Principal {
 				ExploreCoopAgent.class.getName(), entityParametersExplo5);
 		agentList.add(ag);*/
 
+		
+		//!!!!!!!!!!!!!!!!!!!!!!! Soutenance Test 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H1";
+		Object [] entityParametersExplo1={"H2", "H3"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo1);
+		agentList.add(ag);
+		
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H2";
+		Object[] entityParametersExplo2={"H1", "H3"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo2);
+		agentList.add(ag);
+		
+		
+		Assert.assertNotNull("This container does not exist",c);
+		agentName="H3";
+		Object[] entityParametersExplo3={"H1", "H2"};
+		ag=createNewDedaleAgent(c, agentName,
+				ExploreCoopAgent.class.getName(), entityParametersExplo3);
+		agentList.add(ag);
 
-
+		
+		
 		/***********************************************************************
 		 * Type of agents used when you collect and gather treasures on the map
 		 ***********************************************************************/

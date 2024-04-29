@@ -95,7 +95,7 @@ public class ExploCoopBehaviour extends SimpleBehaviour {
 			List<Couple<Location,List<Couple<Observation,Integer>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
 
 			try {
-				this.myAgent.doWait(500);
+				this.myAgent.doWait(400);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
